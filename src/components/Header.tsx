@@ -40,6 +40,12 @@ export function Header() {
       <p className="text-amber-600/50 text-xs mt-0.5 font-mono">
         第{turnCount}月
       </p>
+      <div
+        className="absolute bottom-0 inset-x-0 h-px"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(201,169,78,0.4) 50%, transparent 100%)',
+        }}
+      />
     </header>
   );
 }

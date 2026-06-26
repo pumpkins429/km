@@ -45,7 +45,7 @@ export function EventCard() {
 
       {/* Playing phase: idle, waiting for next event */}
       {gamePhase === 'playing' && !pendingEvent && (
-        <div className="text-center space-y-6">
+        <div className="text-center space-y-6 animate-fadeIn">
           <p className="text-amber-100/70 text-lg">朝中无事，点击继续</p>
           <button
             type="button"
@@ -55,6 +55,7 @@ export function EventCard() {
               text-amber-100
               px-6 md:px-8 py-3 min-h-[44px] rounded-lg
               transition-all duration-200
+              animate-pulseGlow
               hover:scale-[1.02] hover:shadow-lg hover:shadow-amber-900/20
               active:scale-[0.98]
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500
@@ -65,9 +66,8 @@ export function EventCard() {
         </div>
       )}
 
-      {/* Choosing phase: event with choices */}
       {gamePhase === 'choosing' && pendingEvent && (
-        <div className="space-y-6">
+        <div key={pendingEvent.id} className="space-y-6 animate-slideInUp">
           <div>
             <CategoryBadge category={pendingEvent.category} />
           </div>
@@ -81,11 +81,12 @@ export function EventCard() {
           </p>
 
           <div className="space-y-3">
-            {pendingEvent.choices.map((choice) => (
+            {pendingEvent.choices.map((choice, i) => (
               <ChoiceButton
                 key={choice.id}
                 choice={choice}
                 onSelect={selectChoice}
+                style={{ animationDelay: `${i * 80}ms` }}
               />
             ))}
           </div>

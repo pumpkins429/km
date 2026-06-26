@@ -4,9 +4,10 @@ import { STAT_LABELS } from '../data/flavor';
 interface MinisterCardProps {
   minister: Minister;
   onDismiss: (id: string) => void;
+  isConfirming?: boolean;
 }
 
-export function MinisterCard({ minister, onDismiss }: MinisterCardProps) {
+export function MinisterCard({ minister, onDismiss, isConfirming }: MinisterCardProps) {
   const loyaltyColor =
     minister.loyalty >= 70
       ? 'bg-emerald-500'
@@ -65,9 +66,13 @@ export function MinisterCard({ minister, onDismiss }: MinisterCardProps) {
       <button
         type="button"
         onClick={() => onDismiss(minister.id)}
-        className="w-full mt-3 text-red-400/70 hover:text-red-300 text-xs py-2 min-h-[44px] rounded transition-colors duration-200 hover:bg-red-900/20"
+        className={`w-full mt-3 text-xs py-2 min-h-[44px] rounded transition-colors duration-200 ${
+          isConfirming
+            ? 'text-red-300 bg-red-800/30 hover:bg-red-700/30'
+            : 'text-red-400/70 hover:text-red-300 hover:bg-red-900/20'
+        }`}
       >
-        罢免
+        {isConfirming ? '确认罢免' : '罢免'}
       </button>
     </div>
   );

@@ -12,6 +12,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { GameState, GameConfig, SaveSlot } from '../types/game';
 import { newGame, advanceTurn, makeChoice } from '../engine/gameEngine';
 import { DEFAULT_CONFIG } from '../data/config';
+import { getRecruitPool, appointMinister, dismissMinister } from '../engine/ministerEngine';
+import { createRNG } from '../utils/random';
 
 // ============================================================================
 // Actions Interface
@@ -38,6 +40,12 @@ interface GameActions {
 
   /** Delete a save slot */
   deleteSlot: (slotId: string) => void;
+
+  /** Appoint a new minister from the recruit pool */
+  appointNewMinister: (ministerId: string) => void;
+
+  /** Dismiss a minister from court */
+  dismissCurrentMinister: (ministerId: string) => void;
 }
 
 // ============================================================================
@@ -75,6 +83,8 @@ function extractGameState(state: GameStore): GameState {
     saveToSlot,
     loadFromSlot,
     deleteSlot,
+    appointNewMinister,
+    dismissCurrentMinister,
     ...gameState
   } = state;
   return gameState as unknown as GameState;
@@ -166,6 +176,30 @@ export const useGameStore = create<GameStore>()(
 
       deleteSlot: (slotId) => {
         localStorage.removeItem(SLOT_PREFIX + slotId);
+      },
+
+      appointNewMinister: (ministerId) => {
+        const state = get();
+        if (state.ministers.length >= 5) return;
+        const rng = createRNG(state.turn * 1000);
+        const pool = getRecruitPool(state as unknown as GameState, rng);
+        const newMinister = pool.find(m => m.id === ministerId);
+        if (!newMinister) return;
+        const updated = appointMinister(state.ministers, newMinister);
+        if (updated === state.ministers) return;
+        set((draft) => {
+          draft.ministers = updated;
+        });
+      },
+
+      dismissCurrentMinister: (ministerId) => {
+        const state = get();
+        const result = dismissMinister(state.ministers, ministerId);
+        if (result.ministers.length === state.ministers.length) return;
+        set((draft) => {
+          draft.ministers = result.ministers;
+          Object.assign(draft.flags, result.flags);
+        });
       },
     })),
     {

@@ -10,6 +10,7 @@
  *   z-50 — Overlays (GameOverScreen, SaveLoadPanel modal)
  */
 
+import { useState, useMemo } from 'react';
 import { Background } from './components/Background';
 import { Header } from './components/Header';
 import { StatsDashboard } from './components/StatsDashboard';
@@ -18,8 +19,41 @@ import { MinisterPanel } from './components/MinisterPanel';
 import { HistoryLog } from './components/HistoryLog';
 import { SaveLoadPanel } from './components/SaveLoadPanel';
 import { GameOverScreen } from './components/GameOverScreen';
+import { TitleScreen } from './components/TitleScreen';
+import { useGameStore } from './store/gameStore';
 
 export default function App() {
+  const [showTitle, setShowTitle] = useState(true);
+  const startNewGame = useGameStore((s) => s.startNewGame);
+
+  // Check for existing auto-save (Zustand persist stores under this key)
+  const hasSave = useMemo(
+    () =>
+      typeof window !== 'undefined' &&
+      localStorage.getItem('emperor-game-state') !== null,
+    [],
+  );
+
+  const handleNewGame = () => {
+    startNewGame();
+    setShowTitle(false);
+  };
+
+  const handleContinue = () => {
+    setShowTitle(false);
+  };
+
+  // ── Title Screen ──
+  if (showTitle) {
+    return (
+      <TitleScreen
+        hasSave={hasSave}
+        onNewGame={handleNewGame}
+        onContinue={handleContinue}
+      />
+    );
+  }
+
   return (
     <div className="relative min-h-screen text-stone-100 overflow-x-hidden">
       {/* ── Background (z-0, decorative only) ── */}

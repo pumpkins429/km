@@ -82,84 +82,84 @@ export function GameOverScreen() {
           bg-stone-900 border-2 border-amber-800/50
           rounded-2xl p-4 md:p-8 text-center
           shadow-2xl shadow-black/40
-          animate-fadeIn
+          animate-slideInUp
           max-h-[90vh] overflow-y-auto
         "
       >
-        {/* ── Ending Title (谥号) ── */}
         <h1
           className={`
             text-3xl md:text-4xl font-bold mb-2
             ${titleColor}
             ${glowShadow ? `drop-shadow-lg ${glowShadow}` : ''}
+            animate-fadeIn
           `}
+          style={{ animationDelay: '0.2s' }}
         >
           {endingInfo.title}
         </h1>
 
-        {/* ── Ending Description ── */}
-        <p className="text-lg text-stone-300 leading-relaxed mb-2">
+        <p
+          className="text-lg text-stone-300 leading-relaxed mb-2 animate-fadeIn"
+          style={{ animationDelay: '0.35s' }}
+        >
           {endingInfo.description}
         </p>
 
-        {/* ── Game Over Reason ── */}
         {gameOverReason && (
-          <p className="text-sm text-stone-400 italic mb-6">
+          <p
+            className="text-sm text-stone-400 italic mb-6 animate-fadeIn"
+            style={{ animationDelay: '0.45s' }}
+          >
             {GAME_OVER_REASONS[gameOverReason] ?? gameOverReason}
           </p>
         )}
 
-        {/* ── Divider ── */}
         <div className="border-t border-amber-800/30 my-6" />
 
-        {/* ── Reign Summary ── */}
-        <h2 className="text-amber-400/80 text-sm font-bold tracking-wider uppercase mb-4">
+        <h2
+          className="text-amber-400/80 text-sm font-bold tracking-wider uppercase mb-4 animate-fadeIn"
+          style={{ animationDelay: '0.5s' }}
+        >
           御览总结
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left mb-6">
-          {/* Reign years */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.55s' }}>
             <p className="text-stone-400 text-sm">在位年数</p>
             <p className="text-amber-200 font-mono text-lg">
               {calendar.year}年
             </p>
           </div>
 
-          {/* Total turns */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.6s' }}>
             <p className="text-stone-400 text-sm">总回合数</p>
             <p className="text-amber-200 font-mono text-lg">
               {turnCount}
             </p>
           </div>
 
-          {/* Lifespan consumed */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.65s' }}>
             <p className="text-stone-400 text-sm">寿命消耗</p>
             <p className="text-amber-200 font-mono text-lg">
               {formatLifespan(monthsConsumed)}
             </p>
           </div>
 
-          {/* Remaining lifespan */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.7s' }}>
             <p className="text-stone-400 text-sm">剩余寿命</p>
             <p className="text-amber-200 font-mono text-lg">
               {formatLifespan(stats.lifespan)}
             </p>
           </div>
 
-          {/* Notable events */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.75s' }}>
             <p className="text-stone-400 text-sm">经历事件</p>
             <p className="text-amber-200 font-mono text-lg">
               {history.length}件
             </p>
           </div>
 
-          {/* Ministers served */}
-          <div>
+          <div className="animate-fadeIn" style={{ animationDelay: '0.8s' }}>
             <p className="text-stone-400 text-sm">任用臣子</p>
             <p className="text-amber-200 font-mono text-lg">
               {totalMinisters}人
@@ -167,14 +167,20 @@ export function GameOverScreen() {
           </div>
         </div>
 
-        {/* ── Final Stats ── */}
-        <h2 className="text-amber-400/80 text-sm font-bold tracking-wider uppercase mb-3">
+        <h2
+          className="text-amber-400/80 text-sm font-bold tracking-wider uppercase mb-3 animate-fadeIn"
+          style={{ animationDelay: '0.85s' }}
+        >
           终局国势
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 md:gap-x-6 gap-y-1.5 text-left mb-6">
-          {SUMMARY_STATS.map((key) => (
-            <div key={key} className="flex items-center justify-between">
+          {SUMMARY_STATS.map((key, i) => (
+            <div
+              key={key}
+              className="flex items-center justify-between animate-fadeIn"
+              style={{ animationDelay: `${0.9 + i * 0.05}s` }}
+            >
               <span className="text-stone-400 text-sm">
                 {STAT_ICONS[key]} {STAT_LABELS[key]}
               </span>
@@ -187,10 +193,8 @@ export function GameOverScreen() {
           ))}
         </div>
 
-        {/* ── Divider ── */}
         <div className="border-t border-amber-800/30 my-6" />
 
-        {/* ── Actions ── */}
         <button
           type="button"
           onClick={() => startNewGame()}
@@ -199,10 +203,12 @@ export function GameOverScreen() {
             text-amber-100
             px-6 md:px-8 py-3 min-h-[44px] rounded-lg text-base md:text-lg
             transition-all duration-200
+            animate-pulseGlow
             hover:scale-[1.02] hover:shadow-lg hover:shadow-amber-900/20
             active:scale-[0.98]
             focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500
           "
+          style={{ animationDelay: '1.2s' }}
         >
           重新开始
         </button>
